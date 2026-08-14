@@ -1,0 +1,46 @@
+class Solution {
+
+    private static final int[][] DIRECTIONS = new int[][] {{1, 0}, {-1, 0}, {0, -1}, {0, 1}};
+
+    public int longestIncreasingPath(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int[][] dp = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                dfs(i, j, 1, matrix, dp);
+            }
+        }
+
+        int max = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                max = Math.max(max, dp[i][j]);
+            }
+        }
+
+        return max;
+    }
+
+    private void dfs(int i, int j, int steps, int[][] matrix, int[][] dp) {
+        if (dp[i][j] >= steps) {
+            return;
+        }
+
+        dp[i][j] = steps;
+
+        for (int[] direction : DIRECTIONS) {
+            int newRow = i + direction[0];
+            int newCol = j + direction[1];
+
+            if (newRow >= 0 && newRow < matrix.length 
+                && newCol >= 0 && newCol < matrix[0].length
+                && matrix[i][j] < matrix[newRow][newCol]
+            ) {
+                dfs(newRow, newCol, steps + 1, matrix, dp);
+            }
+        }
+    }
+}
